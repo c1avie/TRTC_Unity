@@ -51,7 +51,7 @@
 2. 点击'构建&配置IOS'，等待项目生成完成
 ![](https://imgcache.qq.com/operation/dianshi/other/ios.88273906e5ca84fa9199dff33dfae1d8e53a5388.png)
 3. 使用xcode打开生成好的Unity-iPhone.xcodeproj项目
-4. 下载[TRTC底层sdk](https://comm.qq.com/trtc/TRTC_9.7.0.11440_iOS.zip)，单击 General，选择 Frameworks,Libraries,and Embedded Content，单击底下的“+”号图标依次添加所需要动态库 FFmpeg.xcframework、SoundTouch.xcframework，选择 Embed & Sign。
+4. 下载[TRTC底层sdk](https://upload-dianshi-1255598498.file.myqcloud.com/upload/nodir/TXLiteAVSDK_TRTC_iOS_10-b2f9d0bdd9b6cd235eaf1110393b9245efbf770b.0.0.14003_SDK.zip)，单击 General，选择 Frameworks,Libraries,and Embedded Content，单击底下的“+”号图标依次添加所需要动态库 FFmpeg.xcframework、SoundTouch.xcframework，选择 Embed & Sign。
 ![](https://imgcache.qq.com/operation/dianshi/other/unity.ca7b6e717bf7b34e4f08a7e688ff59bf49d92217.png)
 5. 连接iOS真机进行调试
 
