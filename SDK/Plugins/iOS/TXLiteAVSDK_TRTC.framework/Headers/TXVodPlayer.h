@@ -15,6 +15,12 @@
 #import "TXVodPlayConfig.h"
 #import "TXVodPlayListener.h"
 
+/////////////////////////////////////////////////////////////////////////////////
+//
+//                    VOD 播放器相关接口
+//
+/////////////////////////////////////////////////////////////////////////////////
+
 LITEAV_EXPORT @interface TXVodPlayer : NSObject
 
 /**
@@ -140,7 +146,7 @@ LITEAV_EXPORT @interface TXVodPlayer : NSObject
 /**
  * 设置画面的方向
  *
- * @brief 设置本地图像的顺时针旋转角度
+ * @info 设置本地图像的顺时针旋转角度
  * @param rotation 支持 TRTCVideoRotation90 、 TRTCVideoRotation180 以及 TRTCVideoRotation270 旋转角度，默认值：TRTCVideoRotation0
  * @note 用于窗口渲染模式
  */

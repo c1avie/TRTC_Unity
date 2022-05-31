@@ -246,16 +246,16 @@ class ITRTCCloud
      * 2.7 设置订阅模式（需要在进入房前设置才能生效）
      *
      * 您可以通过该接口在“自动订阅”和“手动订阅”两种模式下进行切换：
-     * - 自动订阅：默认模式，用户在进入房间后会立刻接收到该房间中的音视频流，音频会自动播放，视频会自动开始解码（依然需要您通过 startRemoteView 接口绑定渲染控件）。
-     * - 手动订阅：在用户进入房间后，需要手动调用 {@startRemoteView} 接口才能启动视频流的订阅和解码，需要手动调用 {@muteRemoteAudio} (false) 接口才能启动声音的播放。
+     * - 自动订阅：默认模式，用户在进入房间后会立刻接收到该房间中的音视频流，音频会自动播放，视频会自动开始解码（依然需要您通过 {@link startRemoteView} 接口绑定渲染控件）。
+     * - 手动订阅：在用户进入房间后，需要手动调用 {@link startRemoteView} 接口才能启动视频流的订阅和解码，需要手动调用 {@link muteRemoteAudio} (false) 接口才能启动声音的播放。
      *
      * 在绝大多数场景下，用户进入房间后都会订阅房间中所有主播的音视频流，因此 TRTC 默认采用了自动订阅模式，以求得最佳的“秒开体验”。
      * 如果您的应用场景中每个房间同时会有很多路音视频流在发布，而每个用户只想选择性地订阅其中的 1-2 路，则推荐使用“手动订阅”模式以节省流量费用。
      * @param autoRecvAudio true：自动订阅音频；false：需手动调用 muteRemoteAudio(false) 订阅音频。默认值：true。
      * @param autoRecvVideo true：自动订阅视频；false：需手动调用 startRemoteView 订阅视频。默认值：true。
      * @note
-     * 1. 需要在进入房间（enterRoom）前调用该接口，设置才能生效。
-     * 2. 在自动订阅模式下，如果用户在进入房间后没有调用  {@startRemoteView} 订阅视频流，SDK 会自动停止订阅视频流，以便达到节省流量的目的。
+     * 1. 需要在进入房间前调用该接口进行设置才能生效。
+     * 2. 在自动订阅模式下，如果用户在进入房间后没有调用  {@link startRemoteView} 订阅视频流，SDK 会自动停止订阅视频流，以便达到节省流量的目的。
      */
     virtual void setDefaultStreamRecvMode(bool autoRecvAudio, bool autoRecvVideo) = 0;
 
@@ -448,6 +448,15 @@ class ITRTCCloud
     virtual void muteLocalVideo(TRTCVideoStreamType streamType, bool mute) = 0;
 
     /**
+     * 4.6 设置本地画面被暂停期间的替代图片
+     *
+     * 当您调用 muteLocalVideo(true) 暂停本地画面时，您可以通过调用本接口设置一张替代图片，设置后，房间中的其他用户会看到这张替代图片，而不是黑屏画面。
+     * @param image 设置替代图片，空值代表在 muteLocalVideo 之后不再发送视频流数据，默认值为空。
+     * @param fps 设置替代图片帧率，最小值为5，最大值为10，默认5。
+     */
+    virtual void setVideoMuteImage(TRTCImageBuffer* image, int fps) = 0;
+
+    /**
      * 4.7 订阅远端用户的视频流，并绑定视频渲染控件
      *
      * 调用该接口可以让 SDK 拉取指定 userid 的视频流，并渲染到参数 view 指定的渲染控件上。您可以通过 {@link setRemoteRenderParams} 设置画面的显示模式。
@@ -577,10 +586,10 @@ class ITRTCCloud
      *
      * 开启双路编码模式后，当前用户的编码器会同时输出【高清大画面】和【低清小画面】两路视频流（但只有一路音频流）。
      * 如此以来，房间中的其他用户就可以根据自身的网络情况或屏幕大小选择订阅【高清大画面】或是【低清小画面】。
-     * @note 双路编码开启后，会消耗更多的 CPU 和 网络带宽，所以 Mac、Windows 或者高性能 Pad 可以考虑开启，不建议手机端开启。
      * @param enable 是否开启小画面编码，默认值：false
      * @param smallVideoEncParam 小流的视频参数
      * @return 0：成功；-1：当前大画面已被设置为较低画质，开启双路编码已无必要。
+     * @note 双路编码开启后，会消耗更多的 CPU 和 网络带宽，所以 Mac、Windows 或者高性能 Pad 可以考虑开启，不建议手机端开启。
      */
     virtual void enableSmallVideoStream(bool enable, const TRTCVideoEncParam& smallVideoEncParam) = 0;
 
@@ -589,9 +598,9 @@ class ITRTCCloud
      *
      * 当房间中某个主播开启了双路编码之后，房间中其他用户通过 {@link startRemoteView} 订阅到的画面默认会是【高清大画面】。
      * 您可以通过此接口选定希望订阅的画面是大画面还是小画面，该接口在 {@link startRemoteView} 之前和之后调用均可生效。
-     * @note 此功能需要目标用户已经通过 {@link enableEncSmallVideoStream} 提前开启了双路编码模式，否则此调用无实际效果。
      * @param userId 指定远端用户的 ID。
      * @param streamType 视频流类型，即选择看大画面还是小画面，默认为大画面。
+     * @note 此功能需要目标用户已经通过 {@link enableEncSmallVideoStream} 提前开启了双路编码模式，否则此调用无实际效果。
      */
     virtual void setRemoteVideoStreamType(const char* userId, TRTCVideoStreamType streamType) = 0;
 
@@ -718,7 +727,7 @@ class ITRTCCloud
     /**
      * 5.13 开始录音
      *
-     * 当您调用改接口后， SDK 会将本地和远端的所有音频（包括本地音频，远端音频，背景音乐和音效等）混合并录制到一个本地文件中。
+     * 当您调用该接口后， SDK 会将本地和远端的所有音频（包括本地音频，远端音频，背景音乐和音效等）混合并录制到一个本地文件中。
      * 该接口在进入房间前后调用均可生效，如果录制任务在退出房间前尚未通过 stopAudioRecording 停止，则退出房间后录制任务会自动被停止。
      * @param param 录音参数，请参考 {@link TRTCAudioRecordingParams}
      * @return 0：成功；-1：录音已开始；-2：文件或目录创建失败；-3：后缀指定的音频格式不支持。
@@ -915,12 +924,12 @@ class ITRTCCloud
  *
  * 当您在对接桌面端系统的屏幕分享功能时，一般都需要展示一个选择分享目标的界面，这样用户能够使用这个界面选择是分享整个屏幕还是某个窗口。
  * 通过本接口，您就可以查询到当前系统中可用于分享的窗口的 ID、名称以及缩略图。我们在 Demo 中提供了一份默认的界面实现供您参考。
- * @note
- * 1. 返回的列表中包含屏幕和应用窗口，屏幕是列表中的第一个元素。如果用户有多个显示器，那么每个显示器都是一个分享目标。
- * 2. 请不要使用 delete ITRTCScreenCaptureSourceList* 删除 SourceList，这很容易导致崩溃，请使用 ITRTCScreenCaptureSourceList 中的 release 方法释放列表。
  * @param thumbnailSize 指定要获取的窗口缩略图大小，缩略图可用于绘制在窗口选择界面上
  * @param iconSize 指定要获取的窗口图标大小
  * @return 窗口列表包括屏幕
+ * @note
+ * 1. 返回的列表中包含屏幕和应用窗口，屏幕是列表中的第一个元素。如果用户有多个显示器，那么每个显示器都是一个分享目标。
+ * 2. 请不要使用 delete ITRTCScreenCaptureSourceList* 删除 SourceList，这很容易导致崩溃，请使用 ITRTCScreenCaptureSourceList 中的 release 方法释放列表。
  */
 #if TARGET_PLATFORM_DESKTOP
     virtual ITRTCScreenCaptureSourceList* getScreenCaptureSources(const SIZE& thumbnailSize, const SIZE& iconSize) = 0;
@@ -1280,7 +1289,7 @@ class ITRTCCloud
      * 参数 {@link TRTCAudioFrame} 推荐下列填写方式（其他字段不需要填写）：
      * - sampleRate：采样率，必填，支持 16000、24000、32000、44100、48000。
      * - channel：声道数，必填，单声道请填1，双声道请填2，双声道时数据是交叉的。
-     * - data：用于获取音频数据的 buffer。需要您根据一阵音频帧的帧长度分配好 date 的内存大小。
+     * - data：用于获取音频数据的 buffer。需要您根据一帧音频帧的帧长度分配好 data 的内存大小。
      *         获取的 PCM 数据支持 10ms 或 20ms 两种帧长，推荐使用 20ms 的帧长。
      * 		计算公式为：48000采样率、单声道、且播放时长为 20ms 的一帧音频帧的 buffer 大小为 48000 × 0.02s × 1 × 16bit = 15360bit = 1920字节。
      *
@@ -1454,7 +1463,7 @@ class ITRTCCloud
 /**
  * 启用视频自定义采集模式
  *
- * @deprecated v8.5 版本开始不推荐使用，建议使用 enableCustomVideoCapture(streamType,enable) 接口替代之。
+ * @deprecated v8.5 版本开始不推荐使用，建议使用 {@link enableCustomVideoCapture}(streamType, enable) 接口替代之。
  */
 #ifndef _WIN32
     virtual void enableCustomVideoCapture(bool enable) = 0;
@@ -1463,7 +1472,7 @@ class ITRTCCloud
 /**
  * 投送自己采集的视频数据
  *
- * @deprecated v8.5 版本开始不推荐使用，建议使用 sendCustomVideoData(streamType, TRTCVideoFrame) 接口替代之。
+ * @deprecated v8.5 版本开始不推荐使用，建议使用 {@link sendCustomVideoData}(streamType, TRTCVideoFrame) 接口替代之。
  */
 #ifndef _WIN32
     virtual void sendCustomVideoData(TRTCVideoFrame* frame) = 0;
@@ -1472,7 +1481,7 @@ class ITRTCCloud
 /**
  * 暂停/恢复发布本地的视频流
  *
- * @deprecated v8.9 版本开始不推荐使用，建议使用 muteLocalVideo(streamType, mute) 接口替代之。
+ * @deprecated v8.9 版本开始不推荐使用，建议使用 {@link muteLocalVideo}(streamType, mute) 接口替代之。
  */
 #ifndef _WIN32
     virtual void muteLocalVideo(bool mute) = 0;
@@ -1481,7 +1490,7 @@ class ITRTCCloud
 /**
  * 暂停 / 恢复订阅远端用户的视频流
  *
- * @deprecated v8.9 版本开始不推荐使用，建议使用 muteRemoteVideoStream(userId, streamType, mute) 接口替代之。
+ * @deprecated v8.9 版本开始不推荐使用，建议使用 {@link muteRemoteVideoStream}(userId, streamType, mute) 接口替代之。
  */
 #ifndef _WIN32
     virtual void muteRemoteVideoStream(const char* userId, bool mute) = 0;
@@ -1490,7 +1499,7 @@ class ITRTCCloud
 /**
  *  开始进行网络测速（进入房间前使用）
  *
- * @deprecated v9.2 版本开始不推荐使用，建议使用 startSpeedTest(params) 接口替代之。
+ * @deprecated v9.2 版本开始不推荐使用，建议使用 {@link startSpeedTest}(params) 接口替代之。
  */
 #ifdef __APPLE__
     virtual void startSpeedTest(uint32_t sdkAppId, const char* userId, const char* userSig) __attribute__((deprecated("use startSpeedTest:params instead"))) = 0;

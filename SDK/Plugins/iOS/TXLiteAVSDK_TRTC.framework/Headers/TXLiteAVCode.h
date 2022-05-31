@@ -43,7 +43,8 @@ typedef enum TXLiteAVError
     ERR_UNSUPPORTED_RESOLUTION                      = -1305,    ///< 不支持的视频分辨率
 	ERR_PIXEL_FORMAT_UNSUPPORTED                    = -1327,    ///< 自定视频采集：设置的 pixel format 不支持
     ERR_BUFFER_TYPE_UNSUPPORTED                     = -1328,    ///< 自定视频采集：设置的 buffer type 不支持
-    
+    ERR_NO_AVAILABLE_HEVC_DECODERS                  = -2304,    ///< 找不到可用的 HEVC 解码器
+
     /////////////////////////////////////////////////////////////////////////////////
     //       音频相关错误码
     /////////////////////////////////////////////////////////////////////////////////
