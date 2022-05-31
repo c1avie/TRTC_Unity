@@ -154,7 +154,7 @@
 /**
  * 启用播放音量大小提示。
  *
- * 开启后可以在 [onPlayoutVolumeUpdate](@ref V2TXLivePlayerObserver#onPlayoutVolumeUpdate:volume:) 回调中获取到 SDK 对音量大小值的评估。
+ * 开启后可以在 {@link onPlayoutVolumeUpdate} 回调中获取到 SDK 对音量大小值的评估。
  *
  * @param intervalMs 决定了 onPlayoutVolumeUpdate 回调的触发间隔，单位为ms，最小间隔为100ms，如果小于等于0则会关闭回调，建议设置为300ms；【默认值】：0，不开启
  * @return 返回值 {@link V2TXLiveCode}
@@ -207,7 +207,7 @@
  * 调用 V2TXLivePlayer 的高级 API 接口。
  *
  * @note  该接口用于调用一些高级功能。
- * @param key   高级 API 对应的 key。
+ * @param key   高级 API 对应的 key, 详情请参考 {@link V2TXLiveProperty} 定义。
  * @param value 调用 key 所对应的高级 API 时，需要的参数。
  * @return 返回值 {@link V2TXLiveCode}
  *         - V2TXLIVE_OK: 成功
