@@ -47,7 +47,7 @@ The demo includes the following features:
 2. Click 'IOS'，Wait for project generation to complete
 ![](https://imgcache.qq.com/operation/dianshi/other/ios-en.a177d686f175b086b565565c66e35b9a07accaed.png)
 3. Use Xcode to open the generated 'Unity-iPhone.xcodeproj' project
-4. Download [TRTC SDK](https://comm.qq.com/trtc/TRTC_9.7.0.11440_iOS.zip).You need to manually add the dynamic libraries.
+4. Download [TRTC SDK](https://upload-dianshi-1255598498.file.myqcloud.com/upload/nodir/TXLiteAVSDK_TRTC_iOS_10-b2f9d0bdd9b6cd235eaf1110393b9245efbf770b.0.0.14003_SDK.zip).You need to manually add the dynamic libraries.
 Click General, expand Frameworks, Libraries, and Embedded Content, and click the + icon at the bottom to add the dynamic libraries required in turn:  FFmpeg.xcframework, and SoundTouch.xcframework. Click Embed & Sign.
 ![](https://imgcache.qq.com/operation/dianshi/other/unity.ca7b6e717bf7b34e4f08a7e688ff59bf49d92217.png)
 5. Connects IOS device for debugging
