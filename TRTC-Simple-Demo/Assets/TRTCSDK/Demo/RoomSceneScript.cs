@@ -440,9 +440,9 @@ namespace TRTCCUnityDemo
                 #elif UNITY_ANDROID || UNITY_IOS
                     mTRTCCloud.startScreenCapture(TRTCVideoStreamType.TRTCVideoStreamTypeSub, ref videoEncParam);
                 #endif
-                #if UNITY_IOS
-                    IosExtensionLauncher.TRTCUnityExtensionLauncher();
-                #endif
+                // #if UNITY_IOS
+                //     IosExtensionLauncher.TRTCUnityExtensionLauncher();
+                // #endif
             }
             else
             {
